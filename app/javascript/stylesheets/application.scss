@@ -1,5 +1,11 @@
 @import '~bootstrap/scss/bootstrap';
 
 @import "top";
+
+@import "layouts/navbar";
+
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+
 @import "users/sign_up";
 @import "users/sign_in";
+@import "users/show";
