@@ -68,6 +68,9 @@ if(location.pathname == "/users") {
         // trueなら属性追加。falseなら属性削除
         event.target.classList.toggle('removed', !keep);
 
+
+        let reaction = event.deltaX > 0 ? "like" : "dislike";
+
         // スワイプ位置によって処理を変更している
         if (keep) {
           event.target.style.transform = '';
@@ -81,12 +84,30 @@ if(location.pathname == "/users") {
           let yMulti = event.deltaY / 80;
           let rotate = xMulti * yMulti;
 
+          postReaction(el.id, reaction);
+          
+
           event.target.style.transform = 'translate(' + toX + 'px, ' + (toY + event.deltaY) + 'px) rotate(' + rotate + 'deg)';
 
           initCards();
         }
       });
     });
+
+    function postReaction(user_id, reaction) {
+      $.ajax({
+        url: "reactions.json",
+        type: "POST",
+        datatype: "json",
+        data: {
+          user_id: user_id,
+          reaction: reaction,
+        }
+      })
+        .done(function () {
+          console.log("done!")
+        })
+    }
 
     // ボタンを押したらカードがスワイプする機能の追加
     function createButtonListener(reaction) {
@@ -98,6 +119,12 @@ if(location.pathname == "/users") {
       let moveOutWidth = document.body.clientWidth * 2;
 
       let card = cards[0];
+
+      let user_id = card.id;
+
+      postReaction(user_id, reaction);
+
+      // 処理済みとして、removedを追加。画面から消える
       card.classList.add('removed');
 
       if (reaction == "like") {
