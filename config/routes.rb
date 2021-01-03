@@ -4,9 +4,10 @@ Rails.application.routes.draw do
      registrations: 'registrations',
      sessions: :sessions
    } 
-  
+
   root 'top#index'
   resources :users, only: [:show, :index]
 
   resources :reactions, only: [:create]
+  resources :matching, only: [:index]
 end
