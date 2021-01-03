@@ -11,12 +11,13 @@ const appChatRoom = consumer.subscriptions.create("ChatRoomChannel", {
 
   // chat_room_channel.rbから送られてきたdataを受け取り、アラートを表示
   received(data) {
-    return alert(data['chat_message']);
+    const chatMessages = document.getElementById('chat-messages');
+    chatMessages.insertAdjacentHTML('beforeend', data['chat_message']);
   },
 
   // chat_room_channel.rbのspeakアクションにchat_messageを送信
-  speak: function(chat_message) {
-    return this.perform('speak', { chat_message: chat_message });
+  speak: function(chat_message, chat_room_id) {
+    return this.perform('speak', { chat_message: chat_message, chat_room_id: chat_room_id });
   }
 });
 
@@ -26,11 +27,12 @@ if(/chat_rooms/.test(location.pathname)) {
   // enter を押したら発火する
   $(document).on("keydown", ".chat-room__message-form_textarea", function(e) {
     if (e.key === "Enter") {
+
+      const chat_room_id = $('textarea').data('chat_room_id')
+
       // speacアクションを発火
-      appChatRoom.speak(e.target.value);
-      console.log(e)
-      console.log(e.target)
-      console.log(e.target.value)
+      appChatRoom.speak(e.target.value, chat_room_id);
+
       e.target.value = '';
       e.preventDefault();
     }
