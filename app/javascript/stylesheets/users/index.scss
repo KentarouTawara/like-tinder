@@ -149,3 +149,13 @@
     height: 640px;
   }
 }
+
+.no-user {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  &.is-active {
+    display: flex;
+  }
+}
